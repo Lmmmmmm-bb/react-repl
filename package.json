@@ -22,7 +22,7 @@
     "@radix-ui/react-popover": "^1.1.4",
     "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-slot": "^1.1.1",
-    "@shikijs/monaco": "^1.24.2",
+    "@shikijs/monaco": "^2.0.3",
     "babel-plugin-react-compiler": "0.0.0-experimental-7d62301-20240821",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -35,7 +35,7 @@
     "react": "19.0.0-rc-1d989965-20240821",
     "react-dom": "19.0.0-rc-1d989965-20240821",
     "react-resizable-panels": "^2.1.7",
-    "shiki": "^1.24.2",
+    "shiki": "^2.0.3",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.2"
