@@ -13,7 +13,7 @@ const DialogOverlay: FC<ComponentProps<typeof DialogPrimitive.Overlay>>
   <DialogPrimitive.Overlay
     className={cn(
       ['fixed', 'inset-0', 'z-50'],
-      ['bg-black/0', 'backdrop-blur-sm'],
+      ['bg-black/0', 'backdrop-blur-xs'],
       ['data-[state=open]:animate-in', 'data-[state=open]:fade-in-0'],
       ['data-[state=closed]:animate-out', 'data-[state=closed]:fade-out-0'],
       className,
@@ -58,7 +58,7 @@ const DialogContent: FC<ComponentProps<typeof DialogPrimitive.Content>>
           ['rounded-sm', 'opacity-70', 'ring-offset-background', 'transition-opacity'],
           [
             'hover:opacity-100',
-            'focus:outline-none',
+            'focus:outline-hidden',
             'focus:ring-2',
             'focus:ring-ring',
             'focus:ring-offset-2',

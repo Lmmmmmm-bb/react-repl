@@ -58,9 +58,9 @@ const ResizableHandle: FC<ComponentProps<typeof ResizablePrimitive.PanelResizeHa
       ],
       [
         'data-[resize-handle-active=pointer]:bg-light-400',
-        'data-[resize-handle-active=pointer]:dark:bg-dark-800',
+        'dark:data-[resize-handle-active=pointer]:bg-dark-800',
         'data-[resize-handle-active=keyboard]:bg-light-400',
-        'data-[resize-handle-active=keyboard]:dark:bg-dark-800',
+        'dark:data-[resize-handle-active=keyboard]:bg-dark-800',
       ],
       className,
     )}

@@ -25,7 +25,7 @@ const FileTabs: FC = () => {
   };
 
   return (
-    <Tabs className="flex-shrink-0">
+    <Tabs className="shrink-0">
       {Object.values(files)
         .filter(item => !item.hidden)
         .map((item) => {

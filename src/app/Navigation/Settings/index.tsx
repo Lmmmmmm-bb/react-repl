@@ -26,7 +26,7 @@ const Settings: FC = () => {
 
       <DialogContent
         className={cn(
-          ['w-full', 'max-w-[90vw]', 'lg:max-w-screen-lg'],
+          ['w-full', 'max-w-[90vw]', 'lg:max-w-(--breakpoint-lg)'],
           ['h-full', 'max-h-[90vh]', 'lg:max-h-[70vh]'],
           ['p-0', 'overflow-hidden'],
         )}
@@ -34,7 +34,7 @@ const Settings: FC = () => {
         <div className="flex flex-col lg:flex-row overflow-hidden">
           <Side activePanel={activePanel} onPanelChange={setActivePanel} />
 
-          <div className="flex-[3] overflow-hidden">
+          <div className="flex-3 overflow-hidden">
             {activePanel === SettingPanel.Package && <Packages />}
             {activePanel === SettingPanel.Install && <Install />}
           </div>

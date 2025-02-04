@@ -21,7 +21,7 @@ const VersionNotMatch: FC = () => {
       className={cn(
         ['absolute', 'inset-0', 'z-10'],
         ['flex', 'flex-col', 'items-center', 'justify-center', 'gap-2'],
-        ['backdrop-blur'],
+        ['backdrop-blur-sm'],
       )}
     >
       <Warning className="size-6 text-orange-600" />
