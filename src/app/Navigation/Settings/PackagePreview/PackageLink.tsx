@@ -1,9 +1,9 @@
 import type { AnchorHTMLAttributes, FC, PropsWithChildren } from 'react';
+import type { Package } from '~/stores/package';
 import Bug from '~/icons/Bug';
 import GitHub from '~/icons/GitHub';
 import Link from '~/icons/Link';
 import Npm from '~/icons/Npm';
-import type { Package } from '~/stores/package';
 
 type ExternalLinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
 const ExternalLink: FC<PropsWithChildren<ExternalLinkProps>> = ({ children, ...props }) => (

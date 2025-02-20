@@ -63,17 +63,17 @@ const CorePackage: FC<CorePackageProps> = ({ lib }) => {
       <SelectContent>
         {versionList.length
           ? versionList.map((item, index) => {
-            const isLatest = index === 0;
+              const isLatest = index === 0;
 
-            return (
-              <Fragment key={item}>
-                <SelectItem className="font-mono" value={isLatest ? 'latest' : item}>
-                  {isLatest ? `${item} (latest)` : item}
-                </SelectItem>
-                {isLatest && <SelectSeparator />}
-              </Fragment>
-            );
-          })
+              return (
+                <Fragment key={item}>
+                  <SelectItem className="font-mono" value={isLatest ? 'latest' : item}>
+                    {isLatest ? `${item} (latest)` : item}
+                  </SelectItem>
+                  {isLatest && <SelectSeparator />}
+                </Fragment>
+              );
+            })
           : <SelectItem disabled value="empty">No version</SelectItem>}
       </SelectContent>
     </Select>

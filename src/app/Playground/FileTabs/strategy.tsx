@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
+import type { FileExtensionType } from '~/virtual-file';
 import Css from '~/icons/Css';
 import JavaScript from '~/icons/JavaScript';
 import Json from '~/icons/Json';
 import ReactIcon from '~/icons/React';
 import TypeScript from '~/icons/TypeScript';
-import type { FileExtensionType } from '~/virtual-file';
 
 export const virtualFileExtIconStrategy: Record<FileExtensionType, ReactNode> = {
   css: <Css className="size-[13px] text-[#0288d1]" />,

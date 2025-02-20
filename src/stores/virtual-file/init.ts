@@ -1,13 +1,13 @@
 import type { VirtualFileStore } from './types';
+import type { VirtualFile } from '~/virtual-file';
 import AppCSSRaw from '~/templates/App.css?raw';
-import AppRaw from '~/templates/App?raw';
 
-import MainRaw from '~/templates/main?raw';
+import AppRaw from '~/templates/App?raw';
 import MainLegacyRaw from '~/templates/main-legacy?raw';
+import MainRaw from '~/templates/main?raw';
 import WelcomeCSSRaw from '~/templates/Welcome.css?raw';
 import WelcomeRaw from '~/templates/Welcome?raw';
 import { decompress } from '~/utils/compress';
-import type { VirtualFile } from '~/virtual-file';
 import {
   ENTRY_FILE,
   ENTRY_STYLE,

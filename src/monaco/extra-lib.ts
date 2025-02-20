@@ -1,5 +1,5 @@
-import { fetchPackageFileRaw } from '~/apis/package-raw';
 import type { Package } from '~/stores/package';
+import { fetchPackageFileRaw } from '~/apis/package-raw';
 import { initialPackageStore, usePackageStore } from '~/stores/package';
 import { defaultPackageStore } from '~/stores/package/init';
 import { registerLib } from './utils';
