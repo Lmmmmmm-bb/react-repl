@@ -6,6 +6,7 @@
 
 ## Todo
 
+- Use `biome` instead of `prettier` as code formatter.
 - Use `esbuild` instead of `babel` to compile playground code.
 - Use `@typescript/ata` instead of manual fetch typings.
 - Refactor the communication between sandbox and editor.
