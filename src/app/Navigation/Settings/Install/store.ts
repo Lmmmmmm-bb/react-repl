@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import type { Package } from '~/stores/package';
+import { create } from 'zustand';
 
 interface PackageStore {
   packages: Package[];

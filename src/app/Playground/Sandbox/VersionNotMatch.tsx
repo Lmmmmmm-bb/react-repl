@@ -1,7 +1,7 @@
 import type { FC } from 'react';
+import type { CorePackage } from '~/stores/package';
 import Button from '~/components/ui/Button';
 import Warning from '~/icons/Warning';
-import type { CorePackage } from '~/stores/package';
 import { addCorePackage, usePackageStore } from '~/stores/package';
 import { cn } from '~/utils/cn';
 

@@ -1,9 +1,9 @@
+import type { Package } from '~/stores/package';
 import { type FC, useMemo } from 'react';
 import Calendar from '~/icons/Calendar';
 import Check from '~/icons/Check';
 import CheckFilled from '~/icons/CheckFilled';
 import Cube from '~/icons/Cube';
-import type { Package } from '~/stores/package';
 import { usePackageStore } from '~/stores/package';
 import { cn } from '~/utils/cn';
 import PackageInstall from './PackageInstall';
