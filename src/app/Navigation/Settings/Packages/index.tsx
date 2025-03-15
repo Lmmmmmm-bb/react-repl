@@ -20,7 +20,7 @@ const Packages: FC = () => {
 
   return (
     <div className="h-full pb-4 flex flex-col overflow-hidden">
-      <div className="h-16 lg:h-20 px-4 flex flex-shrink-0 items-center">
+      <div className="h-16 lg:h-20 px-4 flex shrink-0 items-center">
         <div className="relative w-full">
           <Label htmlFor="filter-package">
             <Search className="size-4 absolute left-2.5 top-2.5 opacity-80" />

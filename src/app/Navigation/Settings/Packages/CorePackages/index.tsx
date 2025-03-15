@@ -9,7 +9,7 @@ const CorePackages: FC = () => {
   return (
     <div
       className={cn(
-        ['px-4', 'flex', 'flex-shrink-0', 'gap-2'],
+        ['px-4', 'flex', 'shrink-0', 'gap-2'],
         ['overflow-auto', 'scrollbar-hidden'],
       )}
     >

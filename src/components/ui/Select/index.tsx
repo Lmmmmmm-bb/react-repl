@@ -18,10 +18,10 @@ const SelectTriggerWithIcon: FC<ComponentProps<typeof SelectPrimitive.Trigger> &
   <SelectPrimitive.Trigger
     className={cn(
       ['flex', 'gap-1', 'h-9', 'w-full', 'px-3', 'py-2', 'items-center', 'justify-between'],
-      ['rounded-md', 'border', 'border-input', 'bg-transparent', 'shadow-sm'],
+      ['rounded-md', 'border', 'border-input', 'bg-transparent', 'shadow-xs'],
       ['whitespace-nowrap', 'text-sm'],
       ['placeholder:text-muted-foreground'],
-      ['focus:outline-none'],
+      ['focus:outline-hidden'],
       ['disabled:cursor-not-allowed', 'disabled:opacity-50'],
       ['[&>span]:line-clamp-1'],
       className,
@@ -122,9 +122,9 @@ const SelectItem: FC<ComponentProps<typeof SelectPrimitive.Item>>
    <SelectPrimitive.Item
      className={cn(
        ['relative', 'w-full', 'py-1.5', 'pl-2', 'pr-8', 'flex', 'items-center'],
-       ['cursor-default', 'select-none', 'rounded-sm', 'text-sm', 'outline-none'],
+       ['cursor-default', 'select-none', 'rounded-sm', 'text-sm', 'outline-hidden'],
        ['focus:bg-accent', 'focus:text-accent-foreground'],
-       ['data-[disabled]:pointer-events-none', 'data-[disabled]:opacity-50'],
+       ['data-disabled:pointer-events-none', 'data-disabled:opacity-50'],
        className,
      )}
      {...props}

@@ -7,7 +7,7 @@ const Mounting: FC = () => (
     className={cn(
       ['absolute', 'inset-0'],
       ['flex', 'flex-col', 'items-center', 'justify-center', 'gap-2'],
-      ['backdrop-blur'],
+      ['backdrop-blur-sm'],
     )}
   >
     <Loading className="size-6 animate-spin" />

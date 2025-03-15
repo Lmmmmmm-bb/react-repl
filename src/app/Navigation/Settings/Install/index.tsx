@@ -35,7 +35,7 @@ const Install: FC = () => {
 
   return (
     <div className="h-full pb-4 flex flex-col overflow-hidden">
-      <div className="h-16 lg:h-20 px-4 flex flex-shrink-0 items-center">
+      <div className="h-16 lg:h-20 px-4 flex shrink-0 items-center">
         <div className="relative w-full">
           <Label htmlFor="search-package">
             {fetchPackagesLoading

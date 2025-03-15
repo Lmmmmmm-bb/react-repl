@@ -16,7 +16,7 @@ const PopoverContent: FC<ComponentProps<typeof PopoverPrimitive.Content>>
        className={cn(
          ['w-72', 'p-4', 'z-50'],
          ['bg-popover', 'text-popover-foreground'],
-         ['rounded-md', 'border', 'shadow-md', 'outline-none'],
+         ['rounded-md', 'border', 'shadow-md', 'outline-hidden'],
          [
            'data-[state=open]:animate-in',
            'data-[state=open]:fade-in-0',

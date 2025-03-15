@@ -87,7 +87,7 @@ const NewFile: FC = () => {
                   <input
                     spellCheck={false}
                     placeholder="input filename..."
-                    className="w-24 outline-none bg-transparent"
+                    className="w-24 outline-hidden bg-transparent"
                     ref={inputRef}
                     value={inputValue}
                     onBlur={handleAddFileDone}
