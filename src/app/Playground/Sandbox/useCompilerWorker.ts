@@ -15,6 +15,10 @@ export const useCompilerWorker = <T extends (event: MessageEvent) => void>(fn: T
 
     workerRef.current = new CompilerWorker();
     workerRef.current.addEventListener('message', fn);
+
+    return () => {
+      workerRef.current && workerRef.current.removeEventListener('message', fn);
+    };
   }, [fn]);
 
   return { workerRef, sendWorkerMessage };
