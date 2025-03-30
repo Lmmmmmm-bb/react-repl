@@ -1,4 +1,5 @@
-import { type FC, useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import Button from '~/components/ui/Button';
 import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/Dialog';
 import SettingsIcon from '~/icons/Settings';

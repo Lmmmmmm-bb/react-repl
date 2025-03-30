@@ -1,5 +1,7 @@
+import type { FC } from 'react';
+import type { Package } from '~/stores/package';
 import { SelectTrigger } from '@radix-ui/react-select';
-import { type FC, useState } from 'react';
+import { useState } from 'react';
 import { fetchPackageVersionList } from '~/apis/package-version-list';
 import Button from '~/components/ui/Button';
 import { Select, SelectContent, SelectItem, SelectSeparator } from '~/components/ui/Select';
@@ -7,7 +9,7 @@ import { useToggle } from '~/hooks/useToggle';
 import Download from '~/icons/Download';
 import Loading from '~/icons/Loading';
 import { registerExtraPackageToMonaco } from '~/monaco';
-import { addExtraPackage, type Package } from '~/stores/package';
+import { addExtraPackage } from '~/stores/package';
 import { cn } from '~/utils/cn';
 
 interface PackageInstallProps {

@@ -1,5 +1,6 @@
+import type { FC } from 'react';
 import type { ConsoleSelectType } from '../types';
-import { type FC, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { cn } from '~/utils/cn';
 import { useConsoleStore } from '../store';
 import Message from './Message';

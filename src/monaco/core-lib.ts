@@ -1,7 +1,8 @@
+import type { CorePackage } from '~/stores/package';
 import { fetchPackageFiles } from '~/apis/package-metadata';
 import { fetchPackageFileRaw } from '~/apis/package-raw';
 import { fetchPackageVersionList } from '~/apis/package-version-list';
-import { type CorePackage, initialPackageStore, usePackageStore } from '~/stores/package';
+import { initialPackageStore, usePackageStore } from '~/stores/package';
 import { defaultPackageStore } from '~/stores/package/init';
 import { registerLib } from './utils';
 

@@ -1,11 +1,13 @@
-import { type FC, Fragment, useState } from 'react';
+import type { FC } from 'react';
+import type { CorePackage as CorePackageType } from '~/stores/package';
+import { Fragment, useState } from 'react';
 import { fetchPackageVersionList } from '~/apis/package-version-list';
 import Button from '~/components/ui/Button';
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger } from '~/components/ui/Select';
 import { useToggle } from '~/hooks/useToggle';
 import Loading from '~/icons/Loading';
 import { registerCorePackageToMonaco } from '~/monaco';
-import { addCorePackage, type CorePackage as CorePackageType } from '~/stores/package';
+import { addCorePackage } from '~/stores/package';
 
 interface CorePackageProps {
   lib: CorePackageType;

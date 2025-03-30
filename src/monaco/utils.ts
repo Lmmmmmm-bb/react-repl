@@ -1,5 +1,6 @@
+import type { VirtualFile } from '~/virtual-file';
 import * as monaco from 'monaco-editor';
-import { getVirtualFileLanguage, type VirtualFile } from '~/virtual-file';
+import { getVirtualFileLanguage } from '~/virtual-file';
 import { resetCoreLib } from './core-lib';
 import { resetExtraLib } from './extra-lib';
 import { resetModels } from './model';
