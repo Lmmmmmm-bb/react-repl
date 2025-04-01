@@ -1,8 +1,9 @@
 import type { VirtualFileStore } from './types';
+import type { VirtualFile } from '~/virtual-file';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { compress } from '~/utils/compress';
-import { createVirtualFile, type VirtualFile } from '~/virtual-file';
+import { createVirtualFile } from '~/virtual-file';
 import { usePackageStore } from '../package';
 import { ENTRY_FILE, MAIN_FILE, MAIN_LEGACY_FILE } from './config';
 import { defaultVirtualFileStore, restoreVirtualFileStore } from './init';

@@ -1,6 +1,7 @@
 import type { Plugin, RequiredOptions } from 'prettier';
+import type { VirtualFile } from '~/virtual-file';
 import prettier from 'prettier/standalone';
-import { getVirtualFileExt, type VirtualFile } from '~/virtual-file';
+import { getVirtualFileExt } from '~/virtual-file';
 
 const prettierConfig: Partial<RequiredOptions> = {
   tabWidth: 2,

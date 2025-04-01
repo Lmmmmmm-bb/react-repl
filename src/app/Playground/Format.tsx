@@ -1,4 +1,5 @@
-import { type FC, useCallback, useEffect } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect } from 'react';
 import Container from '~/components/Container';
 import FormatIcon from '~/icons/Format';
 import { getOrCreateMonacoModel, monaco } from '~/monaco';

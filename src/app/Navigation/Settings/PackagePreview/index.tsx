@@ -1,5 +1,6 @@
+import type { FC } from 'react';
 import type { Package } from '~/stores/package';
-import { type FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import Calendar from '~/icons/Calendar';
 import Check from '~/icons/Check';
 import CheckFilled from '~/icons/CheckFilled';
@@ -85,9 +86,9 @@ const PackagePreview: FC<PackagePreviewProps> = ({ npmPackage }) => {
           <PackageLink npmPackage={npmPackage} />
 
           {!isCorePackage
-          && (isPackageInstalled
-            ? <PackageUninstall npmPackage={npmPackage} />
-            : <PackageInstall npmPackage={npmPackage} />)}
+            && (isPackageInstalled
+              ? <PackageUninstall npmPackage={npmPackage} />
+              : <PackageInstall npmPackage={npmPackage} />)}
         </div>
       </div>
     </div>

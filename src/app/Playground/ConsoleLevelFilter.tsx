@@ -9,7 +9,7 @@ import { CONSOLE_LEVEL } from './config';
 const { Action } = Container;
 
 interface ConsoleLevelFilterProps {
-  value: ConsoleSelectType ;
+  value: ConsoleSelectType;
   onChange: (value: ConsoleSelectType) => void;
 }
 

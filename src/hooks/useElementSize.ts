@@ -1,4 +1,5 @@
-import { type RefObject, useEffect, useRef, useState } from 'react';
+import type { RefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const useElementSize = (elRef: RefObject<HTMLDivElement | null>) => {
   const [elementSize, setElementSize] = useState({ width: 0, height: 0 });

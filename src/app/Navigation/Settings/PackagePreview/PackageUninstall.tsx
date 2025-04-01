@@ -1,7 +1,8 @@
 import type { FC } from 'react';
+import type { Package } from '~/stores/package';
 import Button from '~/components/ui/Button';
 import Close from '~/icons/Close';
-import { type Package, removeExtraPackage } from '~/stores/package';
+import { removeExtraPackage } from '~/stores/package';
 import { cn } from '~/utils/cn';
 
 interface PackageUninstallProps {

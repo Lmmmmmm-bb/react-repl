@@ -1,7 +1,8 @@
+import type { FC } from 'react';
 import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
-import type { ConsoleSelectType } from './types';
 
-import { type FC, useRef, useState } from 'react';
+import type { ConsoleSelectType } from './types';
+import { useRef, useState } from 'react';
 import Container from '~/components/Container';
 import {
   ResizableHandle,
