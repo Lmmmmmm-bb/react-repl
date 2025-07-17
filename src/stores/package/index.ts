@@ -1,6 +1,6 @@
 import type { CorePackage, Package, PackageStore } from './types';
-import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { createWithEqualityFn as create } from 'zustand/traditional';
 import { compress } from '~/utils/compress';
 import { useVirtualFileStore } from '../virtual-file';
 import { defaultPackageStore, restorePackageStore } from './init';
