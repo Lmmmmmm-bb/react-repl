@@ -1,8 +1,9 @@
+import type * as esbuild from 'esbuild-wasm';
 import type { VirtualFile } from '~/virtual-file';
 import { getVirtualFileExt, isValidFilename } from '~/virtual-file';
-import { transform } from './transform';
+import { transformCSSImport, transformJsonImport, transformScriptImport } from './transforms';
 
-const getVirtualFileByImportPath = (importValue: string, files: Record<string, VirtualFile>) => {
+export const getVirtualFileByImportPath = (importValue: string, files: Record<string, VirtualFile>) => {
   const importFilename = importValue.replace(/^\.\/+/, '');
   if (isValidFilename(importFilename)) {
     return files[importFilename];
@@ -14,63 +15,47 @@ const getVirtualFileByImportPath = (importValue: string, files: Record<string, V
   return file;
 };
 
-const transformCSSImport = (file: VirtualFile) => {
-  const styleInject = `
-  (() => {
-    const prevStyle = document.querySelector('style[data-file="${file.filename}"]');
+export const createVirtualFilePlugin = (files: Record<string, VirtualFile>) => {
+  const plugin: esbuild.Plugin = {
+    name: 'virtual-files',
+    setup(build) {
+      // Handle virtual file resolution
+      build.onResolve({ filter: /^\.\/.*/ }, (args) => {
+        const importValue = args.path.replace(/^\.\/+/, '');
+        const virtualFile = getVirtualFileByImportPath(importValue, files);
 
-    const newStyle = document.createElement('style');
-    newStyle.setAttribute('data-file', '${file.filename}');
-    newStyle.innerHTML = \`${file.code}\`;
+        if (virtualFile) {
+          return {
+            namespace: 'virtual-file',
+            path: virtualFile.filename,
+          };
+        }
 
-    // remove prev style after new style insert
-    document.head.appendChild(newStyle);
-    prevStyle && prevStyle.remove();
-  })()`;
-  return URL.createObjectURL(
-    new Blob([styleInject], { type: 'application/javascript' }),
-  );
-};
+        return undefined;
+      });
 
-const transformJsonImport = (file: VirtualFile) => {
-  const jsonInject = `export default ${file.code}`;
-  return URL.createObjectURL(
-    new Blob([jsonInject], { type: 'application/javascript' }),
-  );
-};
+      // Handle virtual file loading
+      build.onLoad({ filter: /.*/, namespace: 'virtual-file' }, async (args) => {
+        const virtualFile = files[args.path];
+        if (!virtualFile) {
+          return { errors: [{ text: `Virtual file not found: ${args.path}` }] };
+        }
 
-const transformScriptImport = (file: VirtualFile, files: Record<string, VirtualFile>) =>
-  URL.createObjectURL(
-    new Blob(
-      [transform(file, files)],
-      { type: 'application/javascript' },
-    ),
-  );
+        const ext = getVirtualFileExt(virtualFile.filename);
 
-export const esmImportTransformPlugin = (files: Record<string, VirtualFile>) => {
-  const declarationTransform = (path: any) => {
-    const importValue: string = path.node.source.value;
-    if (importValue.startsWith('./')) {
-      const importFile = getVirtualFileByImportPath(importValue, files);
-      if (!importFile) {
-        return;
-      }
+        if (ext === 'css') {
+          return transformCSSImport(virtualFile.filename, virtualFile.code);
+        }
 
-      const ext = getVirtualFileExt(importFile.filename);
-      if (ext === 'css') {
-        path.node.source.value = transformCSSImport(importFile);
-      } else if (ext === 'json') {
-        path.node.source.value = transformJsonImport(importFile);
-      } else {
-        path.node.source.value = transformScriptImport(importFile, files);
-      }
-    }
-  };
+        if (ext === 'json') {
+          return transformJsonImport(virtualFile.code);
+        }
 
-  return {
-    visitor: {
-      ImportDeclaration: declarationTransform,
-      ExportNamedDeclaration: declarationTransform,
+        // Handle TypeScript/JavaScript files
+        return transformScriptImport(virtualFile.filename, virtualFile.code);
+      });
     },
   };
+
+  return plugin;
 };

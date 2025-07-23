@@ -33,7 +33,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['@babel/standalone'],
+    include: ['esbuild-wasm'],
   },
   worker: {
     format: 'es',
