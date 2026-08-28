@@ -20,7 +20,7 @@ export const registerExtraPackageToMonaco = async (lib: Package) => {
   extraPackageDisposal.set(lib.name, libDisposal);
 };
 
-export const initExtraLib = () => {
+export const initExtraLib = async () => {
   registerLib(
     `declare module "*.json" {
       const value: any;
@@ -29,13 +29,17 @@ export const initExtraLib = () => {
     'file:///node_modules/client.d.ts',
   );
 
-  initialPackageStore
-    .extraPackages
-    .forEach(item => registerExtraPackageToMonaco(item));
+  await Promise.all(
+    initialPackageStore
+      .extraPackages
+      .map(item => registerExtraPackageToMonaco(item)),
+  );
 };
 
-export const resetExtraLib = () => {
-  defaultPackageStore
-    .extraPackages
-    .forEach(item => registerExtraPackageToMonaco(item));
+export const resetExtraLib = async () => {
+  await Promise.all(
+    defaultPackageStore
+      .extraPackages
+      .map(item => registerExtraPackageToMonaco(item)),
+  );
 };

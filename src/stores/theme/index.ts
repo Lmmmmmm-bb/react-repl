@@ -1,7 +1,6 @@
 import type { ThemeModeType, ThemeStore } from './types';
 import { create } from 'zustand';
-import { monaco } from '~/monaco';
-import { REPL_STORAGE_MODE } from './config';
+import { REPL_STORAGE_MODE, REPL_THEME_CHANGE_EVENT } from './config';
 
 const defaultTheme = localStorage.getItem(REPL_STORAGE_MODE) as ThemeModeType || 'light';
 
@@ -10,7 +9,7 @@ const effect = (theme: ThemeModeType) => {
   root.classList.toggle('dark', theme === 'dark');
 
   localStorage.setItem(REPL_STORAGE_MODE, theme);
-  monaco.editor.setTheme(`vitesse-${theme}`);
+  window.dispatchEvent(new CustomEvent(REPL_THEME_CHANGE_EVENT, { detail: theme }));
 };
 
 export const useThemeStore = create<ThemeStore>((set) => {

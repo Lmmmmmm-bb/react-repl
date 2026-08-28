@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import CompilerWorker from './compiler.worker?worker&inline';
+import CompilerWorker from './compiler.worker?worker';
 
 export const useCompilerWorker = <T extends (event: MessageEvent) => void>(fn: T) => {
   const workerRef = useRef<Worker | null>(null);

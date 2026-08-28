@@ -111,7 +111,11 @@ const Sandbox: FC<SandboxProps> = ({ sandboxWidth, sandboxHeight }) => {
   useEffect(() => {
     const handleMessageEvent = (event: MessageEvent) => {
       const payload = event.data;
-      payload.type === 'REACT_MOUNT' && toggleIsSandboxMounting.off();
+      if (payload.type === 'REACT_MOUNT') {
+        performance.mark('repl:preview-ready');
+        performance.measure('repl:preview', 'repl:bootstrap', 'repl:preview-ready');
+        toggleIsSandboxMounting.off();
+      }
       if (payload.type === 'CONSOLE') {
         const consolePayload: ConsolePayload = payload.data;
         const message = {

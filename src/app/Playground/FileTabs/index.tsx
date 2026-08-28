@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import Tabs from '~/components/Tabs';
-import { getOrCreateMonacoModel } from '~/monaco';
 import {
   deleteFile,
   ENTRY_FILE,
@@ -19,8 +18,9 @@ const FileTabs: FC = () => {
     // eslint-disable-next-line no-alert
     if (confirm(`Are you sure you want to delete ${filename}?`)) {
       deleteFile(filename);
-      const model = getOrCreateMonacoModel(files[filename]);
-      model && model.dispose();
+      import('~/monaco').then(({ getOrCreateMonacoModel }) => {
+        getOrCreateMonacoModel(files[filename]).dispose();
+      });
     };
   };
 

@@ -3,11 +3,17 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import og from 'vite-plugin-open-graph';
 
+// The compiler currently prunes external-store guards in the debounced search effect.
+const shouldUseReactCompiler = (filename: string) =>
+  !filename.replaceAll('\\', '/').endsWith('/Settings/Install/index.tsx');
+
 export default defineConfig({
   plugins: [
     react({
       babel: {
-        plugins: ['babel-plugin-react-compiler', {}],
+        plugins: [
+          ['babel-plugin-react-compiler', { sources: shouldUseReactCompiler }],
+        ],
       },
     }),
     og({
@@ -47,16 +53,56 @@ export default defineConfig({
     target: 'esnext',
     rollupOptions: {
       output: {
-        manualChunks: {
-          shiki: ['shiki', '@shikijs/monaco'],
-          editorWorker: ['monaco-editor/esm/vs/editor/editor.worker.js'],
-          monaco: ['monaco-editor'],
-          resizablePanel: ['react-resizable-panels'],
-          prettier: ['prettier'],
-          prettierPostcss: ['prettier/parser-postcss'],
-          prettierTS: ['prettier/plugins/typescript'],
-          prettierBabel: ['prettier/plugins/babel'],
-          prettierEstree: ['prettier/plugins/estree'],
+        manualChunks(id) {
+          if (id.includes('vite/preload-helper') || id.includes('vite/modulepreload-polyfill')) {
+            return 'app-runtime';
+          }
+          if (!id.includes('node_modules')) {
+            return undefined;
+          }
+          if (id.includes('monaco-editor/esm/vs/language/typescript/')) {
+            return 'editor-language-typescript';
+          }
+          if (id.includes('monaco-editor/esm/vs/language/css/')) {
+            return 'editor-language-css';
+          }
+          if (id.includes('monaco-editor/esm/vs/language/json/')) {
+            return 'editor-language-json';
+          }
+          if (id.includes('monaco-editor/esm/vs/editor/editor.worker')) {
+            return 'editor-worker-runtime';
+          }
+          if (id.includes('monaco-editor')) {
+            return 'editor-monaco';
+          }
+          if (id.includes('/shiki/') || id.includes('@shikijs')) {
+            return 'editor-highlight';
+          }
+          if (id.includes('prettier/standalone')) {
+            return 'formatter-core';
+          }
+          if (id.includes('prettier/parser-postcss')) {
+            return 'formatter-postcss';
+          }
+          if (id.includes('prettier/plugins/typescript')) {
+            return 'formatter-typescript';
+          }
+          if (id.includes('prettier/plugins/babel')) {
+            return 'formatter-babel';
+          }
+          if (id.includes('prettier/plugins/estree')) {
+            return 'formatter-estree';
+          }
+          if (id.includes('@radix-ui')) {
+            return 'ui-radix';
+          }
+          if (/node_modules\/(?:react|react-dom|scheduler)\//.test(id)) {
+            return 'react-vendor';
+          }
+          if (id.includes('react-resizable-panels')) {
+            return 'ui-resizable';
+          }
+          return undefined;
         },
       },
     },

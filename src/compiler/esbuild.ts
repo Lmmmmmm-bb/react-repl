@@ -1,11 +1,12 @@
 import * as esbuild from 'esbuild-wasm';
+import esbuildWasmUrl from 'esbuild-wasm/esbuild.wasm?url';
 
 let esbuildInitializationPromise: Promise<void> | null = null;
 
 export const initializeEsbuild = async () => {
   if (!esbuildInitializationPromise) {
     esbuildInitializationPromise = esbuild.initialize({
-      wasmURL: 'https://esm.sh/esbuild-wasm@0.25.8/esbuild.wasm',
+      wasmURL: esbuildWasmUrl,
     });
   }
   return esbuildInitializationPromise;

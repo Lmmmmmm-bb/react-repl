@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import type { Package } from '~/stores/package';
 import { useMemo } from 'react';
+import { useShallow } from 'zustand/shallow';
 import Calendar from '~/icons/Calendar';
 import Check from '~/icons/Check';
 import CheckFilled from '~/icons/CheckFilled';
@@ -16,10 +17,12 @@ interface PackagePreviewProps {
 }
 
 const PackagePreview: FC<PackagePreviewProps> = ({ npmPackage }) => {
-  const packageStore = usePackageStore(state => ({
-    corePackages: state.corePackages,
-    extraPackages: state.extraPackages,
-  }));
+  const packageStore = usePackageStore(
+    useShallow(state => ({
+      corePackages: state.corePackages,
+      extraPackages: state.extraPackages,
+    })),
+  );
 
   const { isCorePackage, storePackage, isPackageInstalled } = useMemo(() => {
     const [corePackage] = packageStore.corePackages.filter(lib => lib.name === npmPackage.name);

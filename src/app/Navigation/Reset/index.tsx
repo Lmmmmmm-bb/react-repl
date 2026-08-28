@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import Button from '~/components/ui/Button';
 import Clean from '~/icons/Clean';
-import { resetMonaco } from '~/monaco';
 import { resetPackageStore } from '~/stores/package';
 import { resetVirtualFileStore } from '~/stores/virtual-file';
 
@@ -11,7 +10,7 @@ const Reset: FC = () => {
     if (confirm('Are you sure you want to reset playground. It can NOT be undone.')) {
       resetPackageStore();
       resetVirtualFileStore();
-      resetMonaco();
+      import('~/monaco').then(({ resetMonaco }) => resetMonaco());
       history.replaceState({}, '', location.pathname);
     }
   };

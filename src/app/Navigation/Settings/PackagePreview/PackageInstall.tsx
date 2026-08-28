@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectSeparator } from '~/components
 import { useToggle } from '~/hooks/useToggle';
 import Download from '~/icons/Download';
 import Loading from '~/icons/Loading';
-import { registerExtraPackageToMonaco } from '~/monaco';
 import { addExtraPackage } from '~/stores/package';
 import { cn } from '~/utils/cn';
 
@@ -21,15 +20,19 @@ const PackageInstall: FC<PackageInstallProps> = ({ npmPackage }) => {
   const [isInstalling, toggleIsInstalling] = useToggle();
   const [versionList, setVersionList] = useState<string[]>([]);
 
-  const handleInstallLib = (version: string) => {
+  const handleInstallLib = async (version: string) => {
     if (isInstalling) {
       return;
     }
     const packageWithVersion: Package = { ...npmPackage, version };
     toggleIsInstalling.on();
-    registerExtraPackageToMonaco(packageWithVersion)
-      .then(() => addExtraPackage(packageWithVersion))
-      .finally(() => toggleIsInstalling.off());
+    try {
+      const { registerExtraPackageToMonaco } = await import('~/monaco');
+      await registerExtraPackageToMonaco(packageWithVersion);
+      addExtraPackage(packageWithVersion);
+    } finally {
+      toggleIsInstalling.off();
+    }
   };
 
   const handleLoadVersion = () => {

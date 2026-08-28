@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
 
 import type { ConsoleSelectType } from './types';
-import { useRef, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 import Container from '~/components/Container';
 import {
   ResizableHandle,
@@ -15,10 +15,11 @@ import { DEVICE_SIZE, PREVIEW_RESIZE_GROUP_SAVE_ID, ROOT_RESIZE_GROUP_SAVE_ID } 
 import Console from './Console';
 import ConsoleLevelFilter from './ConsoleLevelFilter';
 import DeviceSelect from './DeviceSelect';
-import Editor from './Editor';
 import FileTabs from './FileTabs';
 import Format from './Format';
 import Sandbox from './Sandbox';
+
+const Editor = lazy(() => import('./Editor'));
 
 const Playground: FC = () => {
   const isDesktopScreen = useMediaQuery('(min-width: 1024px)');
@@ -39,7 +40,18 @@ const Playground: FC = () => {
       <ResizablePanel>
         <Container title="Editor" action={<Format />}>
           <FileTabs />
-          <Editor />
+          <Suspense
+            fallback={(
+              <div
+                role="status"
+                className="size-full grid place-content-center text-sm opacity-50"
+              >
+                Loading editor…
+              </div>
+            )}
+          >
+            <Editor />
+          </Suspense>
         </Container>
       </ResizablePanel>
 

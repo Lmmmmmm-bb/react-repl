@@ -1,6 +1,5 @@
-import type { Plugin, RequiredOptions } from 'prettier';
+import type { RequiredOptions } from 'prettier';
 import type { VirtualFile } from '~/virtual-file';
-import prettier from 'prettier/standalone';
 import { getVirtualFileExt } from '~/virtual-file';
 
 const prettierConfig: Partial<RequiredOptions> = {
@@ -17,19 +16,21 @@ const prettierConfig: Partial<RequiredOptions> = {
 };
 
 export const formatCode = async (file: VirtualFile) => {
-  let prettierPlugins: Plugin[] = [];
   const ext = getVirtualFileExt(file.filename);
+  const { default: prettier } = await import('prettier/standalone');
+  let prettierPlugins;
 
   if (ext === 'css') {
-    const parserCSS = await import('prettier/parser-postcss');
+    const { default: parserCSS } = await import('prettier/parser-postcss');
     prettierPlugins = [parserCSS];
   } else {
-    prettierPlugins = await Promise.all([
+    const [estree, parser] = await Promise.all([
       import('prettier/plugins/estree'),
       ext === 'json'
         ? import('prettier/plugins/babel')
         : import('prettier/plugins/typescript'),
-    ]) as Plugin[];
+    ]);
+    prettierPlugins = [estree.default, parser.default];
   }
 
   const parser = ext === 'css'

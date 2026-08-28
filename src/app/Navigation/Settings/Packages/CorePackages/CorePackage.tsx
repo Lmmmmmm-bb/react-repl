@@ -6,7 +6,6 @@ import Button from '~/components/ui/Button';
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger } from '~/components/ui/Select';
 import { useToggle } from '~/hooks/useToggle';
 import Loading from '~/icons/Loading';
-import { registerCorePackageToMonaco } from '~/monaco';
 import { addCorePackage } from '~/stores/package';
 
 interface CorePackageProps {
@@ -37,9 +36,13 @@ const CorePackage: FC<CorePackageProps> = ({ lib }) => {
     const isDeclarePackage = lib.name.startsWith('@types/');
     if (isDeclarePackage) {
       toggleLoading.on();
-      registerCorePackageToMonaco(corePackage)
-        .then(() => addCorePackage(corePackage))
-        .finally(() => toggleLoading.off());
+      try {
+        const { registerCorePackageToMonaco } = await import('~/monaco');
+        await registerCorePackageToMonaco(corePackage);
+        addCorePackage(corePackage);
+      } finally {
+        toggleLoading.off();
+      }
     } else {
       addCorePackage(corePackage);
     }

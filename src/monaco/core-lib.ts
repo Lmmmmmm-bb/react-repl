@@ -31,33 +31,42 @@ const disposalCorePackage = (lib: CorePackage) => {
 const DECLARE_FILE_REGEX = /\.d\.ts$|\.json$/;
 export const registerCorePackageToMonaco = async (lib: CorePackage) => {
   const packageFiles = await fetchPackageFiles(lib);
+  const declarations = await Promise.all(
+    packageFiles
+      .filter(item => DECLARE_FILE_REGEX.test(item.name))
+      .map(async item => ({
+        path: item.name,
+        raw: await fetchPackageFileRaw(lib, item.name),
+      })),
+  );
 
   disposalCorePackage(lib);
 
   const { corePackageDisposal } = usePackageStore.getState();
-  packageFiles
-    .filter(item => DECLARE_FILE_REGEX.test(item.name))
-    .forEach(async (item) => {
-      const raw = await fetchPackageFileRaw(lib, item.name);
-      const libPath = `${lib.name}${item.name}`;
-      const libDisposal = registerLib(raw, `file:///node_modules/${libPath}`);
-      corePackageDisposal.set(libPath, libDisposal);
-    });
+  declarations.forEach(({ path, raw }) => {
+    const libPath = `${lib.name}${path}`;
+    const libDisposal = registerLib(raw, `file:///node_modules/${libPath}`);
+    corePackageDisposal.set(libPath, libDisposal);
+  });
 };
 
 const EXCLUDE_PACKAGE_NAME = ['react', 'react-dom'];
 export const initCoreLib = async () => {
   const corePackagesWithVersion = await beforeRegisterCorePackage(initialPackageStore.corePackages);
 
-  corePackagesWithVersion
-    .filter(item => !EXCLUDE_PACKAGE_NAME.includes(item.name))
-    .forEach(item => registerCorePackageToMonaco(item));
+  await Promise.all(
+    corePackagesWithVersion
+      .filter(item => !EXCLUDE_PACKAGE_NAME.includes(item.name))
+      .map(item => registerCorePackageToMonaco(item)),
+  );
 };
 
 export const resetCoreLib = async () => {
   const corePackagesWithVersion = await beforeRegisterCorePackage(defaultPackageStore.corePackages);
 
-  corePackagesWithVersion
-    .filter(item => !EXCLUDE_PACKAGE_NAME.includes(item.name))
-    .forEach(item => registerCorePackageToMonaco(item));
+  await Promise.all(
+    corePackagesWithVersion
+      .filter(item => !EXCLUDE_PACKAGE_NAME.includes(item.name))
+      .map(item => registerCorePackageToMonaco(item)),
+  );
 };

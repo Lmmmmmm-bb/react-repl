@@ -30,8 +30,7 @@ export const getOrCreateMonacoModel = (file: VirtualFile) => {
   );
 };
 
-export const resetMonaco = () => {
+export const resetMonaco = async () => {
   resetModels();
-  resetCoreLib();
-  resetExtraLib();
+  await Promise.all([resetCoreLib(), resetExtraLib()]);
 };
