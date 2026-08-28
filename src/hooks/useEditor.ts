@@ -2,7 +2,6 @@ import type { editor } from 'monaco-editor';
 import { useEffect, useRef } from 'react';
 import { formatActiveFile } from '~/app/Playground/format-active-file';
 import { monaco, monacoOptions } from '~/monaco';
-import { updateFileContent } from '~/stores/virtual-file';
 
 export const useEditor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -16,9 +15,6 @@ export const useEditor = () => {
     const monacoInstance = monaco.editor.create(containerRef.current, monacoOptions);
     performance.mark('repl:editor-ready');
     performance.measure('repl:editor', 'repl:bootstrap', 'repl:editor-ready');
-    monacoInstance.onDidChangeModelContent(
-      () => updateFileContent(monacoInstance.getValue()),
-    );
     monacoInstance.addCommand(
       monaco.KeyMod.Shift | monaco.KeyMod.Alt | monaco.KeyCode.KeyF,
       () => formatActiveFile(),

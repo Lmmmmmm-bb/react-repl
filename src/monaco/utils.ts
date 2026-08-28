@@ -1,34 +1,77 @@
-import type { VirtualFile } from '~/virtual-file';
 import * as monaco from 'monaco-editor';
-import { getVirtualFileLanguage } from '~/virtual-file';
 import { resetCoreLib } from './core-lib';
 import { resetExtraLib } from './extra-lib';
 import { resetModels } from './model';
 
-export const registerLib = (content: string, path: string) => {
-  const tsDisposal = monaco.languages.typescript.typescriptDefaults.addExtraLib(content, path);
-  const jsDisposal = monaco.languages.typescript.javascriptDefaults.addExtraLib(content, path);
+interface LibRegistration {
+  content: string;
+  id: symbol;
+}
+
+interface LibRegistrationEntry {
+  registrations: LibRegistration[];
+}
+
+interface LibFile {
+  content: string;
+  path: string;
+}
+
+const libRegistrationEntries = new Map<string, LibRegistrationEntry>();
+
+const applyLibRegistrations = (changedPaths: Iterable<string>) => {
+  for (const path of changedPaths) {
+    monaco.editor.getModel(monaco.Uri.parse(path))?.dispose();
+  }
+
+  const libs = [...libRegistrationEntries.entries()].flatMap(([path, entry]) => {
+    const registration = entry.registrations[entry.registrations.length - 1];
+    return registration ? [{ content: registration.content, filePath: path }] : [];
+  });
+
+  monaco.languages.typescript.typescriptDefaults.setExtraLibs(libs);
+  monaco.languages.typescript.javascriptDefaults.setExtraLibs(libs);
+};
+
+export const registerLibs = (files: LibFile[]) => {
+  const registrationId = Symbol('lib-bundle');
+  const filesByPath = new Map(files.map(file => [file.path, file]));
+  const registeredPaths = new Set(filesByPath.keys());
+
+  for (const file of filesByPath.values()) {
+    const entry = libRegistrationEntries.get(file.path) || { registrations: [] };
+    entry.registrations.push({ content: file.content, id: registrationId });
+    libRegistrationEntries.set(file.path, entry);
+  }
+  registeredPaths.size && applyLibRegistrations(registeredPaths);
+
+  let isDisposed = false;
 
   return () => {
-    tsDisposal.dispose();
-    jsDisposal.dispose();
+    if (isDisposed) {
+      return;
+    }
+    isDisposed = true;
+
+    for (const path of registeredPaths) {
+      const entry = libRegistrationEntries.get(path);
+      if (!entry) {
+        continue;
+      }
+
+      entry.registrations = entry.registrations
+        .filter(item => item.id !== registrationId);
+      if (!entry.registrations.length) {
+        libRegistrationEntries.delete(path);
+      }
+    }
+    registeredPaths.size && applyLibRegistrations(registeredPaths);
   };
 };
 
-export const getOrCreateMonacoModel = (file: VirtualFile) => {
-  const uri = monaco.Uri.parse(`file:///${file.filename}`);
-  const model = monaco.editor.getModel(uri); ;
-
-  if (model) {
-    return model;
-  }
-
-  return monaco.editor.createModel(
-    file.code,
-    getVirtualFileLanguage(file.filename),
-    uri,
-  );
-};
+export const registerLib = (content: string, path: string) => (
+  registerLibs([{ content, path }])
+);
 
 export const resetMonaco = async () => {
   resetModels();

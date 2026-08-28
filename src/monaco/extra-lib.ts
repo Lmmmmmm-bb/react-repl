@@ -1,23 +1,31 @@
 import type { Package } from '~/stores/package';
-import { fetchPackageFileRaw } from '~/apis/package-raw';
 import { initialPackageStore, usePackageStore } from '~/stores/package';
 import { defaultPackageStore } from '~/stores/package/init';
-import { registerLib } from './utils';
+import { loadPackageTypes } from './package-types';
+import { registerLib, registerLibs } from './utils';
+
+const packageRegistrationRequests = new Map<string, symbol>();
 
 export const registerExtraPackageToMonaco = async (lib: Package) => {
   const { extraPackageDisposal } = usePackageStore.getState();
+  const requestId = Symbol(lib.name);
+  packageRegistrationRequests.set(lib.name, requestId);
+  const previousDisposal = extraPackageDisposal.get(lib.name);
+  previousDisposal?.();
+  extraPackageDisposal.delete(lib.name);
 
-  const dts = await fetchPackageFileRaw(lib);
-  const isDeclareLib = lib.name.startsWith('@types/');
-  const moduleName = isDeclareLib ? lib.name.split('/')[1] : lib.name;
+  const bundle = await loadPackageTypes(lib);
+  const { extraPackages } = usePackageStore.getState();
+  const installedPackage = extraPackages.find(item => item.name === lib.name);
+  if (
+    packageRegistrationRequests.get(lib.name) !== requestId
+    || installedPackage?.version !== lib.version
+  ) {
+    return;
+  }
 
-  const libDisposal = registerLib(
-    `declare module '${moduleName}' {
-      ${dts}
-    }`,
-    `file:///node_modules/${lib.name}`,
-  );
-  extraPackageDisposal.set(lib.name, libDisposal);
+  const disposeBundle = registerLibs(bundle.files);
+  extraPackageDisposal.set(lib.name, disposeBundle);
 };
 
 export const initExtraLib = async () => {

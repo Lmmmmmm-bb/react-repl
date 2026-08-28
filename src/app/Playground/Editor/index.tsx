@@ -2,22 +2,25 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useEditor } from '~/hooks/useEditor';
 import { getOrCreateMonacoModel } from '~/monaco';
+import { revealPendingEditorNavigation } from '~/monaco/event';
 import { useVirtualFileStore } from '~/stores/virtual-file';
 
 const Editor: FC = () => {
-  const { activeFile } = useVirtualFileStore();
+  const activeFilename = useVirtualFileStore(state => state.activeFile.filename);
 
   const { editorRef, containerRef } = useEditor();
 
   useEffect(() => {
-    if (!editorRef.current || !activeFile) {
+    if (!editorRef.current) {
       return;
     }
 
+    const activeFile = useVirtualFileStore.getState().files[activeFilename];
     const model = getOrCreateMonacoModel(activeFile);
     editorRef.current.setModel(model);
+    revealPendingEditorNavigation(editorRef.current, activeFilename);
     editorRef.current.focus();
-  }, [activeFile, editorRef]);
+  }, [activeFilename, editorRef]);
 
   return (
     <div

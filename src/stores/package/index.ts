@@ -46,7 +46,10 @@ export const addCorePackage = (lib: CorePackage) => {
 
 export const addExtraPackage = (lib: Package) => {
   const { extraPackages } = usePackageStore.getState();
-  const newExtraLibs = [...extraPackages, lib];
+  const newExtraLibs = [
+    ...extraPackages.filter(item => item.name !== lib.name),
+    lib,
+  ];
   usePackageStore.setState({ extraPackages: newExtraLibs });
 };
 

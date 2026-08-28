@@ -1,4 +1,4 @@
-import { updateFileContent, useVirtualFileStore } from '~/stores/virtual-file';
+import { useVirtualFileStore } from '~/stores/virtual-file';
 
 export const formatActiveFile = async () => {
   const activeFile = useVirtualFileStore.getState().activeFile;
@@ -8,10 +8,13 @@ export const formatActiveFile = async () => {
   ]);
   const formattedCode = await formatCode(activeFile);
 
-  if (useVirtualFileStore.getState().activeFile.filename !== activeFile.filename) {
+  const currentFile = useVirtualFileStore.getState().activeFile;
+  if (
+    currentFile.filename !== activeFile.filename
+    || currentFile.code !== activeFile.code
+  ) {
     return;
   }
 
-  updateFileContent(formattedCode);
   getOrCreateMonacoModel(activeFile).setValue(formattedCode);
 };

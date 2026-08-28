@@ -56,17 +56,22 @@ export const deleteFile = (filename: string) => {
   && setActiveFile(files[ENTRY_FILE]);
 };
 
-export const updateFileContent = (code: string) => {
+export const updateFileContent = (filename: string, code: string) => {
   const { files, activeFile } = useVirtualFileStore.getState();
+  const file = files[filename];
 
-  const updateFile = { ...activeFile, code };
+  if (!file || file.code === code) {
+    return;
+  }
+
+  const updateFile = { ...file, code };
   const newFiles = {
     ...files,
-    [activeFile.filename]: updateFile,
+    [filename]: updateFile,
   };
   useVirtualFileStore.setState({
     files: newFiles,
-    activeFile: updateFile,
+    activeFile: activeFile.filename === filename ? updateFile : activeFile,
   });
 };
 

@@ -26,10 +26,12 @@ const PackageInstall: FC<PackageInstallProps> = ({ npmPackage }) => {
     }
     const packageWithVersion: Package = { ...npmPackage, version };
     toggleIsInstalling.on();
+    addExtraPackage(packageWithVersion);
     try {
       const { registerExtraPackageToMonaco } = await import('~/monaco');
       await registerExtraPackageToMonaco(packageWithVersion);
-      addExtraPackage(packageWithVersion);
+    } catch (error) {
+      console.error(`Failed to load types for ${packageWithVersion.name}:`, error);
     } finally {
       toggleIsInstalling.off();
     }

@@ -18,8 +18,8 @@ const FileTabs: FC = () => {
     // eslint-disable-next-line no-alert
     if (confirm(`Are you sure you want to delete ${filename}?`)) {
       deleteFile(filename);
-      import('~/monaco').then(({ getOrCreateMonacoModel }) => {
-        getOrCreateMonacoModel(files[filename]).dispose();
+      import('~/monaco').then(({ disposeMonacoModel }) => {
+        disposeMonacoModel(filename);
       });
     };
   };

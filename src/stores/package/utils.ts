@@ -1,5 +1,9 @@
 import { usePackageStore } from '.';
-import { packagePathStrategy, packageRenameStrategy } from './strategy';
+import {
+  packagePathStrategy,
+  packageQueryStrategy,
+  packageRenameStrategy,
+} from './strategy';
 
 export const isLegacyReactDOM = () => {
   const { corePackages } = usePackageStore.getState();
@@ -20,8 +24,14 @@ export const getImportMap = () => {
       : (packageRenameStrategy[currentPackage.name] || currentPackage.name);
 
     const packagePath = packagePathStrategy[packageName] || '';
+    const packageQuery = packageQueryStrategy[packageName] || '';
     const packageWithVersion = `${currentPackage.name}@${currentPackage.version}`;
-    imports[packageName] = `https://esm.sh/${packageWithVersion}${packagePath}`;
+    const packageUrl = `https://esm.sh/${packageWithVersion}`;
+    imports[packageName] = `${packageUrl}${packagePath}${packageQuery}`;
+
+    if (packageName !== currentPackage.name) {
+      imports[currentPackage.name] = packageUrl;
+    }
   }
 
   return { imports };

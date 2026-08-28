@@ -1,10 +1,9 @@
 import type { CorePackage } from '~/stores/package';
-import { fetchPackageFiles } from '~/apis/package-metadata';
-import { fetchPackageFileRaw } from '~/apis/package-raw';
 import { fetchPackageVersionList } from '~/apis/package-version-list';
 import { initialPackageStore, usePackageStore } from '~/stores/package';
 import { defaultPackageStore } from '~/stores/package/init';
-import { registerLib } from './utils';
+import { loadPackageTypes } from './package-types';
+import { registerLibs } from './utils';
 
 const beforeRegisterCorePackage = async (packages: CorePackage[]) => {
   const corePackagesWithVersion: CorePackage[] = await Promise.all(
@@ -28,26 +27,13 @@ const disposalCorePackage = (lib: CorePackage) => {
   }
 };
 
-const DECLARE_FILE_REGEX = /\.d\.ts$|\.json$/;
 export const registerCorePackageToMonaco = async (lib: CorePackage) => {
-  const packageFiles = await fetchPackageFiles(lib);
-  const declarations = await Promise.all(
-    packageFiles
-      .filter(item => DECLARE_FILE_REGEX.test(item.name))
-      .map(async item => ({
-        path: item.name,
-        raw: await fetchPackageFileRaw(lib, item.name),
-      })),
-  );
-
+  const bundle = await loadPackageTypes(lib);
   disposalCorePackage(lib);
 
   const { corePackageDisposal } = usePackageStore.getState();
-  declarations.forEach(({ path, raw }) => {
-    const libPath = `${lib.name}${path}`;
-    const libDisposal = registerLib(raw, `file:///node_modules/${libPath}`);
-    corePackageDisposal.set(libPath, libDisposal);
-  });
+  const disposeBundle = registerLibs(bundle.files);
+  corePackageDisposal.set(`${lib.name}/__type_bundle__`, disposeBundle);
 };
 
 const EXCLUDE_PACKAGE_NAME = ['react', 'react-dom'];
